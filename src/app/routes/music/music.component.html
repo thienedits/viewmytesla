@@ -1,0 +1,50 @@
+<div class="m-lg" layout="row" layout-align="start">
+    <!-- <button hide-gt-md class="mr" mat-icon-button (click)="snav.toggle()">
+        <mat-icon>menu</mat-icon>
+    </button> -->
+    <div hide-md hide-xs hide-sm class="upload-btn upload-input mr-lg">
+        <button mat-stroked-button color="accent" (click)="chooseFiles()">
+            <mat-icon class="mr-sm" aria-label="Add Clips">folder</mat-icon>
+        </button>
+        <input #filesInput type="file" webkitdirectory directory multiple accept="video/mp4,video/x-m4v,video/*"
+            (change)="filesSelected()">
+        <input type="text" readonly value="{{filesInputDisplay}}">
+    </div>
+    <div hide-gt-md class="upload-btn mr-lg">
+        <button mat-stroked-button color="accent" (click)="chooseFiles()">
+            <mat-icon class="mr-sm" aria-label="Add Clips">cloud_upload</mat-icon>
+        </button>
+        <input #filesInput type="file" webkitdirectory directory multiple accept="video/mp4,video/x-m4v,video/*"
+            (change)="filesSelected()">
+    </div>
+
+    <div layout="row" layout-align="center center" class="iso-section--rounded mr-lg">
+        <button mat-icon-button class="mat-hint" color="accent" title="Previous" (click)="playPrev()">
+            <mat-icon>skip_previous</mat-icon>
+        </button>
+        <button *ngIf="!isPlaying" mat-icon-button class="mat-hint mh md-48" color="accent" title="Play"
+            (click)="playPause()">
+            <mat-icon>play_circle_filled</mat-icon>
+        </button>
+        <button *ngIf="isPlaying" mat-icon-button class="mat-hint mh md-48" color="primary" title="Pause"
+            (click)="playPause()">
+            <mat-icon>pause_circle_filled</mat-icon>
+        </button>
+        <button mat-icon-button class="mat-hint" color="accent" title="Next" (click)="playNext()">
+            <mat-icon>skip_next</mat-icon>
+        </button>
+    </div>
+
+    <audio id="audio-src" #audioSrc controls>
+        <source src="" type="audio/flac" autoplay="true">
+    </audio>
+</div>
+
+<mat-action-list role="list">
+    <ng-container *ngFor="let file of filesArr; let i = index">
+        <button mat-list-item role="listitem"
+            [ngClass]="{'selected': file.fileName === selectedClip.fileName}"
+            (click)="loadClip(file, i)">{{i + 1}} {{file.fileName}}
+        </button>
+    </ng-container>
+</mat-action-list>

@@ -1,0 +1,304 @@
+@import './app/shared/styles/bootstrap.scss';
+@import './app/shared/styles/normalize.scss';
+@import './app/shared/styles/layout-attributes.scss';
+@import './app/shared/styles/utils.scss';
+@import './app/shared/styles/black-red.scss';
+// Import theming functions
+@import '~@angular/material/theming';
+
+/* You can add global styles to this file, and also import other style files */
+:root {
+    --tsla-base-spacer: 8px;
+    --tsla-base-spacer--negative: calc(var(--tsla-base-spacer) * -1);
+    --tsla-base-border_radius: 4px;
+    --tsla-base-font_size: calc(var(--tsla-base-spacer) * 2);
+    --tsla-base-line_height: calc(var(--tsla-base-spacer) * 3);
+    --tsla-base-header_font: 'Raleway', sans-serif;
+    --tsla-base-header-font_weight: 500;
+    --tsla-multiplier-font_size: 1;
+    --tsla-multiplier-line_height: 1;
+    --tsla-hyperlink-color: var(--tsla-color--blue);
+    --tsla-hyperlink-underline_color: var(--tsla-color--blue);
+    --tsla-code-background: var(--tsla-color--lightestgrey);
+    --tsla-code-border_color: rgba(88, 77, 65, .1);
+    --tsla-code-border_radius: 2px;
+    --tsla-code-padding_top: calc(var(--tsla-base-spacer) / 8);
+    --tsla-code-padding_right: calc(var(--tsla-base-spacer) / 2);
+    --tsla-code-padding_bottom: var(--tsla-code-padding_top);
+    --tsla-code-padding_left: var(--tsla-code-padding_right);
+    --tsla-code-font_size-multiplier: var(--tsla-multiplier-font_size);
+    --tsla-code-line_height-multiplier: var(--tsla-multiplier-line_height);
+    --tsla-list_item-type: none;
+    --tsla-list_item-margin_top: 0;
+    --tsla-list_item-margin_right: 0;
+    --tsla-list_item-margin_bottom: 8px;
+    --tsla-list_item-margin_left: 0;
+    --tsla-list_item-padding_top: 0;
+    --tsla-list_item-padding_right: 0;
+    --tsla-list_item-padding_bottom: 0;
+    --tsla-list_item-padding_left: 0;
+    --tsla-color--red: #c00;
+    --tsla-color--blue: #3e6ae1;
+    --tsla-color--green: #59aa00;
+    --tsla-color--orange: #cc7f00;
+    --tsla-color--offwhite: #ddd;
+    --tsla-color--white: #fff;
+    --tsla-color--black: #222;
+    --tsla-color--grey: #666;
+    --tsla-color--mediumgrey: #999;
+    --tsla-color--lightgrey: #f7f7f7;
+    --tsla-color--lightestgrey: #fafafa;
+    --tsla-base-header_color: var(--tsla-color--black);
+    --tsla-base-text_color: var(--tsla-color--grey);
+    --tsla-btn-margin: 2px;
+    --tsla-btn-font_size: 13px;
+    --tsla-btn-background: var(--tsla-color--black);
+    --tsla-btn-foreground: var(--tsla-color--white);
+    --tsla-btn-border_radius: 100px;
+    --tsla-btn-border_width: 3px;
+    --tsla-btn-border_style: solid;
+    --tsla-btn-border_color: transparent;
+    --tsla-btn-border: var(--tsla-btn-border_width) var(--tsla-btn-border_style) var(--tsla-btn-border_color);
+    --tsla-btn-padding_top: calc((var(--tsla-base-spacer) * 2) - var(--tsla-btn-border_width));
+    --tsla-btn-padding_right: calc((var(--tsla-base-spacer) * 8) - var(--tsla-btn-border_width));
+    --tsla-btn-padding_bottom: calc((var(--tsla-base-spacer) * 2) - var(--tsla-btn-border_width));
+    --tsla-btn-padding_left: calc((var(--tsla-base-spacer) * 8) - var(--tsla-btn-border_width));
+    --tsla-btn-outline_color: var(--tsla-color--black);
+    --tsla-btn--selected_red: #ad0000;
+    --tsla-btn--selected_blue: #3459be;
+    --tsla-btn--selected_grey: #575757;
+    --tsla-modal-content-max_height: calc(100vh - (var(--tsla-base-spacer) * 2));
+    --tsla-modal-content-bg_color: var(--tsla-color--white);
+    --tsla-modal-content-color: var(--tsla-color--grey_6);
+    --tsla-modal-header-min_height: calc((var(--tsla-base-spacer) * 2));
+    --tsla-modal-header-bg_color: var(--tsla-color--white);
+    --tsla-modal-border_bottom_width: 1px;
+    --tsla-modal-border_bottom_color: hsla(0, 0%, 100%, .9);
+    --tsla-modal-title-padding_top: calc(var(--tsla-base-spacer) * 4);
+    --tsla-modal-title-padding_bottom: var(--tsla-modal-title-padding_top);
+    --tsla-modal-title-padding_right: calc(var(--tsla-base-spacer) * 3);
+    --tsla-modal-title-padding_left: var(--tsla-modal-title-padding_right);
+    --tsla-modal-title-font-size: calc(var(--tsla-base-font_size) * 2);
+    --tsla-modal-close-width: calc(var(--tsla-base-spacer) * 5);
+    --tsla-modal-close-height: calc(var(--tsla-base-spacer) * 5);
+    --tsla-modal-close-font_size: calc(var(--tsla-base-spacer) * 5);
+    --tsla-modal-close-font_family: 'Raleway', sans-serif;
+    --tsla-modal-close-font_weight: 300;
+    --tsla-modal-close-color: var(--tsla-color--grey_6);
+    --tsla-modal-body-padding_left: calc(var(--tsla-base-spacer) * 3);
+    --tsla-modal-body-color: var(--tsla-color--white);
+    --tsla-modal-body-max_height: calc(100vh - (var(--tsla-base-spacer) * 2));
+    --tsla-modal-width: calc(var(--tsla-base-spacer) * 60);
+}
+
+html {
+    font-family: 'Raleway', sans-serif;
+    font-size: var(--tsla-base-font_size);
+    line-height: 1.7;
+}
+
+a {
+    color: mat-color($tesla-app-accent);
+    text-decoration: underline;
+    background-color: transparent;
+}
+
+.content-wrapper {
+    max-width: 960px;
+}
+
+audio::-webkit-media-controls-play-button {
+    display: none;
+}
+
+.mat-icon-button.md-48 {
+    height: 48px;
+    width: 48px;
+    font-size: 48px;
+
+    .mat-icon {
+        height: 48px;
+        width: 48px;
+        font-size: 48px;
+        line-height: 48px;
+    }
+}
+
+.teslacam {
+    .app-container {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .cameras-container {
+        h3 {
+            @include media-breakpoint-down(sm) {
+                font-size: 13px;
+            }
+        }
+    }
+
+    #donations img.emoji {
+        margin-bottom: 6px;
+    }
+
+    .mat-toolbar {
+        // height: 240px;
+        background-image: url('/assets/img/hero-ms.jpg');
+        background-size: auto;
+        background-repeat: no-repeat;
+        background-position-x: right;
+        background-color: #0c0c0c;
+    }
+
+    .is-mobile .mat-toolbar {
+        position: fixed;
+        /* Make sure the toolbar will stay on top of the content as it scrolls past. */
+        z-index: 2;
+    }
+
+    .mat-sidenav {
+        width: 280px;
+
+        .logo {
+            background-color: #0c0c0c;
+            height: 64px;
+        }
+    }
+
+    .mat-sidenav-content {
+        display: flex;
+    }
+
+    .mat-sidenav-container {
+        /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+           causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+        flex: 1;
+    }
+
+    .mat-list-item.selected {
+        background: rgba(0, 0, 0, 0.04)
+    }
+
+    .is-mobile .mat-sidenav-container {
+        /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+           `<body>` to be our scrolling element for mobile layouts. */
+        flex: 1 0 auto;
+    }
+
+    .player-controls {
+        font-size: 13px;
+
+        .mat-icon-button {
+            height: 48px;
+            width: 48px;
+        }
+    }
+
+    footer {
+        font-size: 13px;
+        //margin: 0 -15px;
+        padding: 10px 15px;
+        border-top: solid 1px rgba(0, 0, 0, 0.12);
+    }
+
+    .video-container {
+        position: relative;
+
+        .mat-icon {
+            color: #fff;
+            font-size: 36px;
+            line-height: 36px;
+            height: 36px;
+            width: 36px;
+        }
+
+        .mat-icon-button {
+            position: absolute;
+            right: 10px;
+        }
+    }
+}
+
+.iso-section--rounded {
+    border-radius: 8px;
+    border: 1px solid var(--tsla-color--offwhite);
+}
+
+.iso-grid {
+    width: 100%;
+    padding: 25px 0 0;
+}
+
+[mat-static-control] {
+    color: rgba(0, 0, 0, .87);
+    font-size: 16px;
+    padding-bottom: 1.25em;
+
+    a {
+        line-height: 32px;
+        margin-bottom: 15.5px;
+        display: block;
+    }
+
+    >label {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 13.5px;
+        color: rgba(0, 0, 0, 0.54);
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    >div.border-bottom {
+        padding-bottom: 6px;
+        border-bottom: .5px solid rgba(0, 0, 0, 0.7) !important;
+    }
+}
+
+video::-webkit-media-controls-play-button // video#left-video::-webkit-media-controls-timeline,
+
+// video#right-video::-webkit-media-controls-timeline 
+    {
+    display: none;
+}
+
+.upload-btn {
+    flex-direction: row;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: flex-start;
+    max-width: 100%;
+
+    input[type=file] {
+        display: none;
+        position: fixed;
+        top: -99999px;
+    }
+
+    input[type=text] {
+        height: 50px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        box-sizing: border-box;
+        border-radius: 0 8px 8px 0;
+        padding-left: 8px;
+    }
+
+    .mat-stroked-button {
+        line-height: 48px;
+        border-radius: 8px;
+    }
+
+    &.upload-input .mat-stroked-button {
+        border-right: 0;
+        border-radius: 8px 0 0 8px;
+    }
+}

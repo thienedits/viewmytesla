@@ -1,0 +1,17 @@
+Language:        JavaScript
+BasedOnStyle:    Google
+ColumnLimit:     100
+
+IndentWidth: 		     4
+TabWidth:                4
+ContinuationIndentWidth: 4
+MaxEmptyLinesToKeep    : 2
+
+AllowShortBlocksOnASingleLine:              false
+AllowShortIfStatementsOnASingleLine:        false
+AllowShortLoopsOnASingleLine:               false
+AllowShortFunctionsOnASingleLine:           Empty
+AllowAllParametersOfDeclarationOnNextLine:  true
+BinPackArguments:                           true
+BinPackParameters:                          true
+JavaScriptWrapImports:                      true

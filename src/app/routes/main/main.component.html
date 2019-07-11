@@ -1,0 +1,257 @@
+<div class="app-container" [class.is-mobile]="mobileQuery.matches">
+    <mat-toolbar hide-md hide-xs hide-sm color="primary">
+        <button class="mr" mat-icon-button (click)="snav.toggle()">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <img src="assets/img/logo.png" alt="" height="30">
+    </mat-toolbar>
+
+    <mat-sidenav-container>
+        <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" [opened]="mobileQuery.matches ? false : true">
+            <div class="logo" hide-gt-md layout="row" layout-align="center center">
+                <img src="assets/img/logo.png" alt="" height="30">
+            </div>
+            <h3 *ngIf="selectedClip" class="ml-lg mb0">Recent Clips</h3>
+            <mat-action-list role="list">
+                <ng-container *ngFor="let file of recentClipsArr; let i = index">
+                    <button *ngIf="file[0].path.indexOf('RecentClips') > -1" mat-list-item role="listitem"
+                        [ngClass]="{'selected': file[0].date.format('LLL') === selectedClip[0].date.format('LLL')}"
+                        (click)="loadClip(file, i)">{{i + 1}}.
+                        {{file[0].date.format('LLL')}}
+                    </button>
+                </ng-container>
+            </mat-action-list>
+            <h3 *ngIf="selectedClip" class="ml-lg mb0">Saved Clips</h3>
+            <mat-action-list role="list">
+                <ng-container *ngFor="let file of filesArr; let i = index">
+                    <button *ngIf="file[0].path.indexOf('SavedClips') > -1" mat-list-item role="listitem"
+                        [ngClass]="{'selected': file[0].date.format('LLL') === selectedClip[0].date.format('LLL')}"
+                        (click)="loadClip(file, i)">{{i + 1}}.
+                        {{file[0].date.format('LLL')}}
+                    </button>
+                </ng-container>
+            </mat-action-list>
+        </mat-sidenav>
+
+        <mat-sidenav-content class="" layout="column">
+            <div class="main-content-container mt-lg" flex>
+                <div *ngIf="isLoading" class="alert alert-warning m-lg" layout="row" layout-align="center center">
+                    If you have alot of files, it may take a while to load them all. Please be patient! Microsoft Edge seems
+                    to be having issues loading a lot of clips, so I've set a limit to only load 1000 clips if you are using 
+                    Microsoft Ege.
+                </div>
+                <div class="ml-lg mt player-controls" layout="column" layout-gt-sm="row" layout-align="start">
+                    <div class="mb" layout="row" layout-align="start">
+                        <button hide-gt-md class="mr" mat-icon-button (click)="snav.toggle()">
+                            <mat-icon>menu</mat-icon>
+                        </button>
+                        <div hide-md hide-xs hide-sm class="upload-btn upload-input mr-lg">
+                            <button mat-stroked-button color="accent" (click)="chooseFiles()">
+                                <mat-icon class="mr-sm" aria-label="Add Clips">cloud_upload</mat-icon>
+                            </button>
+                            <input #filesInput type="file" webkitdirectory directory multiple
+                                accept="video/mp4,video/x-m4v,video/*" (change)="filesSelected()">
+                            <input type="text" readonly value="{{filesInputDisplay}}">
+                        </div>
+                        <div hide-gt-md class="upload-btn mr-lg">
+                            <button mat-stroked-button color="accent" (click)="chooseFiles()">
+                                <mat-icon class="mr-sm" aria-label="Add Clips">cloud_upload</mat-icon>
+                            </button>
+                            <input #filesInput type="file" webkitdirectory directory multiple
+                                accept="video/mp4,video/x-m4v,video/*" (change)="filesSelected()">
+                        </div>
+
+                        <div layout="row" layout-align="center center" class="iso-section--rounded mr-lg" flex>
+                            <button mat-icon-button class="mat-hint" color="accent" title="Previous" (click)="playPrev()">
+                                <mat-icon>chevron_left</mat-icon>
+                            </button>
+                            <button *ngIf="!isPlaying" mat-icon-button class="mat-hint mh" color="accent" title="Play"
+                                (click)="playPause()">
+                                <mat-icon>play_arrow</mat-icon>
+                            </button>
+                            <button *ngIf="isPlaying" mat-icon-button class="mat-hint mh" color="primary" title="Pause"
+                                (click)="playPause()">
+                                <mat-icon>pause</mat-icon>
+                            </button>
+                            <button mat-icon-button class="mat-hint" color="accent" title="Next" (click)="playNext()">
+                                <mat-icon>chevron_right</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                    <div layout="row" layout-align="end center" class="iso-section--rounded mr-lg mb">
+                        <div layout="row" layout-align="start center">
+                            <div class="m0 mh">
+                                Speed <span class="ml-sm">{{slider.displayValue}}</span>
+                            </div>
+                            <mat-slider #slider class="" [value]="2" [disabled]="false" [max]="16" [min]="0"
+                                [thumbLabel]="true" [displayWith]="formatLabel" (change)="playbackRateChanged($event)">
+                            </mat-slider>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="ml-lg mt0">
+                    {{selectedClipDisplay}}
+                </h3>
+                <div class="cameras-container" layout="column" layout-gt-sm="row" layout-align="start">
+                    <div class="" layout="column" layout-align="space-between" flex="100" flex-gt-sm="33">
+                        <h3 class="m0 ml-lg">Left</h3>
+                        <div class="video-container">
+                            <button mat-icon-button class="" title="Fullscreen" (click)="toggleFullscreen('left')">
+                                <mat-icon>fullscreen</mat-icon>
+                            </button>
+                            <video id="left-video" #leftVideo muted width="100%" (click)="toggleFullscreen('left')">
+                                <source src="" type="video/mp4" autoplay="true">
+                            </video>
+                        </div>
+                    </div>
+                    <div class="" layout="column" layout-align="space-between" flex="100" flex-gt-sm="33">
+                        <h3 class="m0 ml-lg">Front</h3>
+                        <div class="video-container">
+                            <button mat-icon-button class="" title="Fullscreen" (click)="toggleFullscreen('front')">
+                                <mat-icon>fullscreen</mat-icon>
+                            </button>
+                            <video #frontVideo controls controlsList="nofullscreen" width="100%"
+                                (click)="toggleFullscreen('front')">
+                                <source src="" type="video/mp4" autoplay="true">
+                            </video>
+                        </div>
+                    </div>
+                    <div class="" layout="column" layout-align="space-between" flex="100" flex-gt-sm="33">
+                        <h3 class="m0 ml-lg">Right</h3>
+                        <div class="video-container">
+                            <button mat-icon-button class="" title="Fullscreen" (click)="toggleFullscreen('right')">
+                                <mat-icon>fullscreen</mat-icon>
+                            </button>
+                            <video id="right-video" #rightVideo muted width="100%" (click)="toggleFullscreen('right')">
+                                <source src="" type="video/mp4" autoplay="true">
+                            </video>
+                        </div>
+                    </div>
+                </div>
+                <div class="new-alerts alert alert-primary m-lg">
+                    Viewing on mobile phone has limited support. Most likely will only work on iPhone running iOS 13 or later.
+                </div>
+                <div class="mh-lg content-wrapper">
+                    <h3>General Info</h3>
+                    <p>
+                        Hey thanks for visiting, this site will allow you to view your TeslaCam footage easily. I know
+                        there's already some similar sites/projects that do this but since I just got my Model 3, I
+                        thought it would be a fun weekend project to build something. Also, I work in Frontend
+                        development building enterprise video content management/learning platforms so this seems
+                        right up my alley. First things first, since Tesla has decided to encode their videos using the
+                        H.265 codec, the only reliable browsers able to play TeslaCam videos are <a
+                            href="https://www.microsoft.com/en-us/windows/microsoft-edge" target="_blank">Microsoft Edge
+                            (Windows)</a> and <a href="https://support.apple.com/downloads/safari"
+                            target="_blank">Safari (Mac)</a>. Most likely Google Chrome will not work, and it doesn't
+                        look they will be adding support anytime in the foreseeable future. If you are on HW2.5 and
+                        the videos are encoded in H.264, then Google Chrome should work. Unfortunately not many browsers do
+                        support the H.265 video codec. You can see browser support <a
+                            href="https://caniuse.com/#feat=hevc" target="_blank">here</a>.
+                    </p>
+                    <div>
+                        Some tips for using the site:
+                    </div>
+                    <ul>
+                        <li>When choosing files you can just choose the whole TeslaCam folder, this
+                            should load all the videos in the side nav</li>
+                        <li>Clicking on an event in the side nav should automatically start playing
+                            that clip</li>
+                        <li>The clips will automatically play from one to the next</li>
+                        <li>Use next and prev buttons to cycle through the clips easily</li>
+                        <li>Use the Front Cam controls to seek different times in the clip</li>
+                        <li>Change the playback speed with the slider at the top (2 settings for slow-mo)</li>
+                        <li>Click on menu button to hide the side nav, making the video screens
+                            larger</li>
+                    </ul>
+                    <div>
+                        I am thinking about adding:
+                        <ul>
+                            <li>A calendar viewer</li>
+                            <li>Any user based feedback/ideas, message me on twitter <a
+                                    href="https://twitter.com/thienedits" target="_blank">@thienedits</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Jolokia Corporation Plug</h3>
+                        <p>Sorry I had to add a plug for the company I am working for, <a href="https://jolokia.com/"
+                                target="_blank">Jolokia Corporation</a>. We have a video learning platform used for
+                            corporate communications and training. We provide live webcasting, searchable video content
+                            management, in-stream quizzing, closed captioning and more. More info at our <a
+                                href="https://www.linkedin.com/company/jolokia-networks/" target="_blank">LinkedIn
+                                page</a>.
+                        </p>
+                    </div>
+                    <div id="donations">
+                        <h3>Donations</h3>
+                        <div class="mb-lg">
+                            Currently, I am not planning to charge for this site but any donations
+                            are welcomed!
+                        </div>
+                        <div class="mb-40" layout="row" layout-align="start center">
+                            <div class="mr-40" *ngFor="let price of donationPrices" layout="row"
+                                layout-align="start center">
+                                <span class="mr-sm">
+                                    {{price.viewValue}}
+                                </span>
+                                <img class="emoji" *ngIf="price.value === '5.00'" src="assets/img/emoji_u1f44c.png"
+                                    alt="" height="24">
+                                <img class="emoji" *ngIf="price.value === '10.00'" src="assets/img/emoji_u1f44d.png"
+                                    alt="" height="24">
+                                <img class="emoji" *ngIf="price.value === '20.00'" src="assets/img/emoji_u1f64f.png"
+                                    alt="" height="24">
+                                <img class="emoji" *ngIf="price.value === '25.00'" src="assets/img/dancing.png" alt=""
+                                    height="36">
+                            </div>
+                        </div>
+                        <div layout="column" layout-gt-sm="row" layout-align="start">
+                            <!-- <div #donationsElRef class="mr-60">
+                                <mat-form-field>
+                                    <mat-label>Google Pay Donations</mat-label>
+                                    <mat-select [(value)]="donationTotal" (selectionChange)="donationChanged($event)">
+                                        <mat-option *ngFor="let price of donationPrices" [value]="price.value">
+                                            <div layout="row" layout-align="start center">
+                                                <span class="mr-lg">
+                                                    {{price.viewValue}}
+                                                </span>
+                                                <img class="ml emoji" *ngIf="price.value === '5.00'" src="https://noto-website-2.storage.googleapis.com/emoji/emoji_u1f44c.png" alt="" height="24">
+                                                <img class="emoji" *ngIf="price.value === '10.00'" src="https://noto-website-2.storage.googleapis.com/emoji/emoji_u1f44d.png" alt="" height="24">
+                                                <img class="emoji" *ngIf="price.value === '20.00'" src="https://noto-website-2.storage.googleapis.com/emoji/emoji_u1f64f.png" alt="" height="24">
+                                                <img class="emoji" *ngIf="price.value === '25.00'" src="assets/img/dancing.png" alt="" height="36">
+                                            </div>
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <div>
+                                    <a href="https://pay.google.com/payments/u/0/home#sendRequestMoney" mat-stroked-button target="blank">
+                                        <img src="assets/img/light_gpay.svg" alt="">
+                                    </a>
+                                </div>
+                            </div> -->
+
+                            <div mat-static-control class="mr-60">
+                                <label for="">Google Pay Donations</label>
+                                <a href="https://pay.google.com/payments/u/0/home#sendRequestMoney"
+                                    target="_blank">thienpham.us@gmail.com</a>
+                                <a href="https://pay.google.com/payments/u/0/home#sendRequestMoney" mat-stroked-button
+                                    target="blank">
+                                    <img src="assets/img/light_gpay.svg" alt="">
+                                </a>
+                            </div>
+                            <div mat-static-control class="">
+                                <label for="">Venmo Donations</label>
+                                <a href="https://venmo.com/Thien-Pham-2" target="_blank">@Thien-Pham-2</a>
+                                <div class="iso-section--rounded p-lg">
+                                    <img src="assets/img/venmo-qrcode.jpg" alt="" height="80">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <footer>Copyright &copy; 2019 Thien Pham. All rights reserved. Designated trademarks and
+                brands are the property of their respective owners.</footer>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+</div>
